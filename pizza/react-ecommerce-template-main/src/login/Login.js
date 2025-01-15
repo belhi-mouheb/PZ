@@ -10,12 +10,14 @@ import {
 import 'mdb-react-ui-kit/dist/css/mdb.min.css';
 import './Login.css';
 import { Link, useHistory } from 'react-router-dom'; // Utilisation de useHistory pour la v5
+import { useAuth } from '../template/AuthContext'; // Importer le contexte d'authentification
 
 function App() {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [error, setError] = useState('');
   const history = useHistory(); // Utilisation de useHistory pour la v5
+  const { login } = useAuth(); // Récupérer la fonction login du contexte
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -28,23 +30,24 @@ function App() {
         password,
       });
 
-      // Si la connexion réussie, affiche la réponse
+      // Si la connexion réussit, appeler la fonction login du contexte
       console.log('Réponse de connexion:', response.data);
+      login(email); // Met à jour le contexte pour définir isLoggedIn à true et stocker l'email
 
-      // Si les informations sont correctes, redirection vers la page des produits
+      // Enregistrer l'email dans le localStorage
+      localStorage.setItem('userEmail', email);
+
+      // Redirection vers la page des produits
       history.push('/products'); // Utilisation de history.push pour la v5
     } catch (err) {
       // Gérer les erreurs du backend ou les erreurs réseau
       if (err.response) {
-        // Erreur du backend, affichage du message d'erreur
         console.error('Erreur de connexion:', err.response.data);
         setError(err.response.data.message || 'Email ou mot de passe incorrect.');
       } else if (err.request) {
-        // Erreur réseau (pas de réponse du serveur)
         console.error('Erreur réseau:', err.request);
         setError('Problème de connexion au serveur. Veuillez réessayer plus tard.');
       } else {
-        // Autres erreurs (par exemple, erreur interne)
         console.error('Erreur inconnue:', err.message);
         setError('Une erreur inconnue est survenue.');
       }
@@ -58,10 +61,10 @@ function App() {
           <div className="d-flex flex-column ms-5">
             <div className="text-center">
               <img
-                src="https://mdbcdn.b-cdn.net/img/Photos/new-templates/bootstrap-login-form/lotus.webp"
+                src="https://png.pngtree.com/png-clipart/20190613/original/pngtree-pizza-logo-png-image_3543851.jpg"
                 style={{ width: '185px' }} alt="logo"
               />
-              <h4 className="mt-1 mb-5 pb-1">We are The Lotus Team</h4>
+              <h4 className="mt-1 mb-5 pb-1">Pizza Tabarkino </h4>
             </div>
 
             <p>Please login to your account</p>
@@ -107,14 +110,16 @@ function App() {
         </MDBCol>
 
         <MDBCol col='6' className="mb-5">
-          <div className="d-flex flex-column justify-content-center gradient-custom-2 h-100 mb-4">
-            <div className="text-white px-3 py-4 p-md-5 mx-md-4">
-              <h4 className="mb-4">We are more than just a company</h4>
-              <p className="small mb-0">
-                Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.
-              </p>
-            </div>
-          </div>
+        <div className="d-flex flex-column justify-content-center gradient-custom-2 h-100 mb-4">
+  <div className="text-white px-3 py-4 p-md-5 mx-md-4">
+    <h4 className="mb-4">Bienvenue chez Pizza tabarkino</h4>
+    <p className="small mb-0">
+      Découvrez les meilleures pizzas artisanales préparées avec des ingrédients frais et un savoir-faire exceptionnel.
+      Commandez dès maintenant et laissez-vous tenter par des saveurs uniques et authentiques qui raviront vos papilles.
+    </p>
+  </div>
+</div>
+
         </MDBCol>
       </MDBRow>
     </MDBContainer>

@@ -1,10 +1,12 @@
 import React, { useState, useEffect } from "react";
 import { useParams } from "react-router-dom";
+import { useCart } from "../../panier/CartContext"; // Importer le contexte du panier
 import ScrollToTopOnMount from "../../template/ScrollToTopOnMount";
 
 function ProductDetail() {
   const { id } = useParams();
   const [pizza, setPizza] = useState(null);
+  const { addToCart } = useCart(); // Récupérer la fonction addToCart depuis le contexte
 
   useEffect(() => {
     // Remplacez cette URL par celle correspondant à votre API ou source de données
@@ -44,7 +46,12 @@ function ProductDetail() {
           <p><strong>Discount:</strong> {pizza.discount}%</p>
           <p><strong>Available:</strong> {pizza.isAvailable ? "Yes" : "No"}</p>
           <p><strong>Date Added:</strong> {new Date(pizza.dateAdded).toLocaleDateString()}</p>
-          <button className="btn btn-dark py-2 w-100">Add to Cart</button>
+          <button 
+            className="btn btn-dark py-2 w-100" 
+            onClick={() => addToCart(pizza)} // Ajouter la pizza au panier lorsqu'on clique sur le bouton
+          >
+            Add to Cart
+          </button>
         </div>
       </div>
     </div>

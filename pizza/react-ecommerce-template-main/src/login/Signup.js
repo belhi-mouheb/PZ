@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import axios from 'axios';
+import { useHistory } from 'react-router-dom'; // Importer useHistory
 import {
   MDBBtn,
   MDBContainer,
@@ -23,6 +24,7 @@ function Signup() {
   });
 
   const [message, setMessage] = useState('');
+  const history = useHistory(); // Initialiser le history
 
   // Gérer les changements dans les champs du formulaire
   const handleChange = (e) => {
@@ -36,12 +38,13 @@ function Signup() {
     try {
       const response = await axios.post('http://localhost:5000/api/auth/signup', formData);
       setMessage(response.data.message || 'Inscription réussie !');
+      // Si l'inscription réussie, rediriger vers /login
+      history.push('/login');
     } catch (err) {
       console.error(err); // Ajout du log d'erreur pour plus de détails
       setMessage(err.response?.data?.message || 'Une erreur est survenue.');
     }
   };
-  
 
   return (
     <MDBContainer fluid>
@@ -120,7 +123,7 @@ function Signup() {
 
             <MDBCol md='10' lg='6' className='order-1 order-lg-2 d-flex align-items-center'>
               <MDBCardImage 
-                src='https://mdbcdn.b-cdn.net/img/Photos/new-templates/bootstrap-registration/draw1.webp' 
+                src='https://static.vecteezy.com/ti/vecteur-libre/p1/6886615-pizza-vector-logo-cartoon-ce-logo-est-tres-adapte-a-tout-restaurant-lie-a-la-pizza-restauration-rapide-livraison-bistro-restauration-et-entreprises-liees-a-l-alimentation-italienne-vectoriel.jpg' 
                 fluid 
               />
             </MDBCol>
